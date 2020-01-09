@@ -1,0 +1,31 @@
+{% extends 'halls/base.html'%}
+
+{% block content %}
+
+<h2 class='mt-3 text-center custom-font'> Create a gallery </h2>
+
+{% load widget_tweaks %}
+
+<form method="post" class='text-center mt-3'>
+
+  {% csrf_token %}
+
+  {% for field in form %}
+
+  <div class="form-group {% if field.errors %} alert alert-danger {% endif %}">
+
+    {{ field.errors }}
+
+    {{ field.label_tag }}
+
+    {% render_field field class='form-control text-center' %}
+
+    {% endfor %}
+
+    <input type="submit" class='btn btn-primary mt-3' value="Create">
+
+  </div>
+
+</form>
+
+{% endblock %}

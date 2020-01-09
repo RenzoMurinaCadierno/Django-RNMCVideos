@@ -1,0 +1,35 @@
+{% extends 'halls/base.html'%}
+
+{% block content %}
+
+<h2 class='text-center mt-3 custom-font'> Edit gallery </h2>
+
+{% load widget_tweaks %}
+
+<form method="post" class='text-center mt-3 custom-font'>
+
+  {% csrf_token %}
+
+  {% for field in form %}
+
+  <div class="form-group {% if field.errors %} alert alert-danger {% endif %}">
+
+    {{ field.errors }}
+
+    {{ field.label_tag }}
+
+    {% render_field field class='form-control text-center' %}
+
+  {% endfor %}
+
+    <input type="submit" class='btn btn-outline-primary mt-3' value="Update">
+
+    <a href="{% url 'delete_gallery' hall.id %}" class='btn btn-danger mt-3'>
+      Delete
+    </a>
+
+  </div>
+</form>
+
+
+{% endblock %}

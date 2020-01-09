@@ -1,0 +1,42 @@
+{% extends 'halls/base.html'%}
+
+{% block content %}
+
+  <h2 class='text-center mt-3 custom-font'> Login </h2>
+
+  {% load widget_tweaks %}
+
+  <form method="post" class='text-center mt-4 custom-font'>
+
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+
+      <div class="alert alert-danger"> {{ form.non_field_errors }} </div>
+
+    {% endif %}
+
+    {% for field in form %}
+
+    <div class="form-group mt-3 {% if field.errors %} alert alert-danger {% endif %}">
+
+      {{ field.errors }}
+
+      <b> {{ field.label_tag }} </b>
+
+      {% render_field field class='form-control text-center my-2' %}
+
+      {% if field.help_text %}
+
+        <small class="text-muted"> {{ field.help_text }} </small>
+
+      {% endif %}
+
+    {% endfor %}
+
+      <input type="submit" class='btn btn-primary mt-3' value="Login">
+
+    </div>
+  </form>
+
+{% endblock %}

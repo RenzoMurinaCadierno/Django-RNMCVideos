@@ -1,0 +1,150 @@
+{% extends 'halls/base.html'%}
+
+{% block content %}
+
+<h2 class='mt-3 text-center custom-font'> Add video to {{ gallery.title }} </h2>
+
+<form method="post" id='submit_video' class='text-center'>
+
+  {% csrf_token %}
+
+  {% load widget_tweaks %}
+
+  {% for field in form %}
+
+  <div class="form-group custom-font {% if field.errors %} alert alert-danger {% endif %}">
+
+    {{ field.errors }}
+
+    {{ field.label_tag }}
+
+    {% render_field field class='form-control' %}
+
+  </div>
+
+  {% endfor %}
+
+  <input type="submit" class='btn btn-primary custom-font' value="Add video">
+
+</form>
+
+<br>
+
+<h2 class='text-center custom-font'> Or </h2>
+
+<!-- Add the form to search by AJAX -->
+<form class='text-center'>
+
+  {% for field in search_form %}
+
+  <div class="form-group custom-font">
+
+    {{ field.errors }}
+
+    {{ field.label_tag }}
+
+    {% render_field field class='form-control' %}
+
+  </div>
+
+  {% endfor %}
+
+</form>
+
+<div id="search_result">
+
+  <script>
+
+    let delayTimer;
+
+    $('#id_search_term').keyup(function() {
+
+      clearTimeout(delayTimer)
+
+      $('#search_result').text('Fetching...')
+
+      delayTimer = setTimeout(function() {
+
+        let text = $('#id_search_term').val()
+
+        $.ajax({
+
+          url: '/video/search',
+          data: {
+            'search_term': text
+          },
+          dataType: 'json',
+
+          // data is the JSON response of YT API, a big dictionary
+          success: function(data) {
+
+            // var to hold the results
+            let results = ''
+
+            // empty the results box
+            $('#search_result').text('')
+
+            results += '<div class="row">'
+
+            // retrieve everything inside the fetched items and for
+            // each of them, append its title
+            data['items'].forEach(function(video) {
+
+              // add bootstrap for the columns the results are
+              // to be displayed
+              results += '<div class="col-12 col-md-6 col-lg-4 col-xl-3 mt-4">'
+
+              // for each column, a card to hold the results
+              results += '<div class="card mb-4 shadow-md">'
+
+              // the fetched results inside the bootstrap structure.
+              // WE NEED TO EMBED THE VIDEO!
+              // Go to youtube > click on a video > share > Embed
+              //    > copy the iframe code
+              results += '<iframe width="100%" height="225" src="https://www.youtube.com/embed/'
+              + video['id']['videoId']
+              + '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+
+              // a div for the card body
+              results += '<div class="card-body text-center custom-font"> <p class="card-text">'
+                      + video['snippet']['title']
+                      + '</p>'
+
+              // add the button to add the video
+              results += '<a href="#" class="btn btn-primary mb-1 custom-font" '
+                      + 'onclick="addVideo(\'' + video['id']['videoId'] + '\')">'
+                      + 'Add video</a>'
+                      + '</div>'
+
+              // and close the divs
+              results += '</div></div>'
+            })
+
+            results += '</div>'
+
+            // append the results to the invisible input
+            $('#search_result').append(results)
+
+          }     // end success
+        })      // end AJAX
+      }, 2500)  // end setTimeout
+    })          // end keyup
+
+    // a function to simulate a click on the add button on the
+    // form above, to assign to the button to add video in AJAX
+    function addVideo(video_id) {
+
+      // grab the input form to add a URL manually, set the value to
+      // the video_id passed as a parameter (when clicking the add
+      // button on the AJAX videos)
+      $('#id_url').val('https://www.youtube.com/watch?v=' + video_id)
+
+      // grab the upper form by its id and submit it.
+      $('#submit_video').submit()
+    }
+
+  </script>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'halls/base.html'%}
+
+{% block content %}
+
+<h2 class='text-center mt-3 custom-font'> Sure to delete this gallery? </h2>
+
+<h2 class='text-center custom-font'>
+  <a href="{% url 'detail_gallery' hall.id %}">
+    {{hall.title}}
+  </a>
+</h2>
+
+<form method="post" class='text-center mt-3 custom-font'>
+
+  {% csrf_token %}
+
+  {{ form.as_p }}
+
+  <input type="submit" class='btn btn-danger' value="Yes, delete">
+
+  <a href="{% url 'detail_gallery' hall.id %}"
+     class='btn btn-outline-primary'>
+     No, go back
+   </a>
+
+</form>
+
+{% endblock %}

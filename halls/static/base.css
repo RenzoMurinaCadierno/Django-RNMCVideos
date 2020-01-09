@@ -1,0 +1,32 @@
+header {
+  box-shadow: 0 2px 8px 8px rgba(255, 255, 255, 0.9),
+  0 2px 8px 5px rgba(255, 255, 255, 0.7),
+  0 2px 8px 3px rgba(255, 255, 255, 0.5),
+  0 2px 8px 1px rgba(255, 255, 255, 0.3);
+}
+
+.jumbotron {
+  background-color: #EBF4FA;
+}
+
+.jumbotron-heading {
+  font-weight: 300;
+  color: #65369c;
+}
+
+.jumbotron .container {
+  max-width: 51rem;
+}
+
+.custom-font {
+  font-family: 'Viga', sans-serif;
+}
+
+a.custom-font {
+  text-decoration: none;
+}
+
+.by-username {
+  font-style: italic;
+  font-size: 0.65em;
+}
